@@ -7,5 +7,5 @@ import (
 )
 
 type User interface {
-	FindAll(ctx *gin.Context) []entities.Users
+	FindCredential(ctx *gin.Context, email string) entities.Users
 }

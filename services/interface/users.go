@@ -6,6 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type User interface {
-	FindAll(ctx *gin.Context) []models.UsersResponseModel
+type Authentication interface {
+	Login(ctx *gin.Context, users *models.AuthModel) string
 }
