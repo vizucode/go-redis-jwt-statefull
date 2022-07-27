@@ -20,14 +20,14 @@ func NewUser(db *gorm.DB) *UserImpl {
 
 func (r *UserImpl) FindAll(ctx *gin.Context) []entities.Users {
 	users := []entities.Users{}
-	if err := r.DB.Find(&users).Error; err != nil {
+	if err := r.DB.WithContext(ctx).Find(&users).Error; err != nil {
 		panic(exception.BadRequestError(err.Error()))
 	}
 	return users
 }
 
 func (r *UserImpl) Store(ctx *gin.Context, user *entities.Users) entities.Users {
-	if err := r.DB.Create(&user).Error; err != nil {
+	if err := r.DB.WithContext(ctx).Create(&user).Error; err != nil {
 		panic(exception.InternalServerError(err.Error()))
 	}
 	return *user
