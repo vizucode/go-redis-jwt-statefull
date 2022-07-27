@@ -3,6 +3,7 @@ package main
 import (
 	"go_jwt_statefull/config"
 	"go_jwt_statefull/handlers"
+	"go_jwt_statefull/middlewares"
 	repositories "go_jwt_statefull/repositories"
 	"go_jwt_statefull/services"
 
@@ -21,7 +22,7 @@ func main() {
 	server.Use(gin.Logger())
 	server.Use(gin.CustomRecovery(handlers.Recovery))
 
-	userAPI := server.Group("/users")
+	userAPI := server.Group("/users", middlewares.Authorize)
 	{
 		userAPI.GET("/", userHandler.FindAll)
 		userAPI.POST("/store", userHandler.Store)
