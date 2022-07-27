@@ -1,7 +1,12 @@
 package models
 
 type UsersResponseModel struct {
-	Id       int    `json:"id"`
+	Id    int    `json:"id"`
+	Name  string `json:"name"`
+	Email string `json:"email"`
+}
+
+type UsersRequestStoreModel struct {
 	Name     string `json:"name"`
 	Email    string `json:"email"`
 	Password string `json:"password"`

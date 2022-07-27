@@ -8,4 +8,5 @@ import (
 
 type User interface {
 	FindAll(ctx *gin.Context) []models.UsersResponseModel
+	Store(ctx *gin.Context, user *models.UsersRequestStoreModel) models.UsersResponseModel
 }

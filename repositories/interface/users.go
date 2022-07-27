@@ -8,4 +8,5 @@ import (
 
 type User interface {
 	FindAll(ctx *gin.Context) []entities.Users
+	Store(ctx *gin.Context, user *entities.Users) entities.Users
 }
