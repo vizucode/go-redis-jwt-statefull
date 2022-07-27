@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"go_jwt_statefull/exception"
 	"go_jwt_statefull/models"
 	services "go_jwt_statefull/services/interface"
 	"net/http"
@@ -30,7 +31,7 @@ func (h *Users) Store(ctx *gin.Context) {
 	usersRequest := new(models.UsersRequestStoreModel)
 	err := ctx.ShouldBindJSON(usersRequest)
 	if err != nil {
-		panic(err.Error())
+		panic(exception.BadRequestError(err.Error()))
 	}
 	userResult := h.Services.Store(ctx, usersRequest)
 	ctx.JSON(http.StatusOK, gin.H{

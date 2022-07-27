@@ -2,6 +2,7 @@ package services
 
 import (
 	"go_jwt_statefull/entities"
+	"go_jwt_statefull/exception"
 	"go_jwt_statefull/models"
 	repositories "go_jwt_statefull/repositories/interface"
 
@@ -35,7 +36,7 @@ func (s *UsersImpl) FindAll(ctx *gin.Context) []models.UsersResponseModel {
 func (s *UsersImpl) Store(ctx *gin.Context, user *models.UsersRequestStoreModel) models.UsersResponseModel {
 	result, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
-		panic(err.Error())
+		panic(exception.BadRequestError(err.Error()))
 	}
 	user.Password = string(result)
 	userResult := s.Repo.Store(ctx, &entities.Users{

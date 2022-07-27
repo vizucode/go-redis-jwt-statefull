@@ -19,6 +19,7 @@ func main() {
 
 	server := gin.New()
 	server.Use(gin.Logger())
+	server.Use(gin.CustomRecovery(handlers.Recovery))
 
 	userAPI := server.Group("/users")
 	{
