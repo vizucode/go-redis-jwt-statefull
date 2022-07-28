@@ -8,4 +8,5 @@ import (
 
 type Authentication interface {
 	Login(ctx *gin.Context, users *models.AuthModel) string
+	Logout(ctx *gin.Context, token string) bool
 }

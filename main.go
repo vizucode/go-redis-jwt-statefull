@@ -3,6 +3,7 @@ package main
 import (
 	"go_jwt_statefull/config"
 	"go_jwt_statefull/handlers"
+	"go_jwt_statefull/middlewares"
 	repositories "go_jwt_statefull/repositories"
 	"go_jwt_statefull/services"
 
@@ -12,14 +13,19 @@ import (
 func main() {
 	db := config.NewDB()
 	userRepo := repositories.NewUser(db)
-	userService := services.NewAuthentication(userRepo)
-	userHandler := handlers.NewAuth(userService)
+	authService := services.NewAuthentication(userRepo)
+	authHandler := handlers.NewAuth(authService)
 
 	server := gin.New()
 	server.Use(gin.Logger())
 	server.Use(gin.CustomRecovery(handlers.Recovery))
 
-	server.POST("/login", userHandler.Login)
+	server.POST("/login", authHandler.Login)
+
+	logout := server.Group("/logout", middlewares.Authorization)
+	{
+		logout.POST("/", authHandler.Logout)
+	}
 
 	server.NoRoute(handlers.NoRoute)
 
