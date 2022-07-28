@@ -12,6 +12,7 @@ import (
 func Authorize(ctx *gin.Context) {
 	tokenString, err := ctx.Cookie("token")
 	rdb := config.RedisClient()
+	defer rdb.Close()
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 			"message": err.Error(),
