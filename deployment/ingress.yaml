@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-svc
+spec:
+  rules:
+    - host: pengguna-example.com
+      http:
+        paths:
+          - path: /login
+            pathType: Prefix
+            backend:
+              service:
+                name: auth-svc
+                port:
+                  number: 8000
+          - path: /logout
+            pathType: Prefix
+            backend:
+              service:
+                name: auth-svc
+                port:
+                  number: 8000
+          - path: /users
+            pathType: Prefix
+            backend:
+              service:
+                name: users-svc
+                port:
+                  number: 8080

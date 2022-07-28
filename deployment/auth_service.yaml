@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authentication-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: authentication-pod
+  template:
+    metadata:
+      name: authentication-pod
+      labels:
+        app: authentication-pod
+    spec:
+      containers:
+        - name: go-auth
+          image: hirasakavizu/go_authentication:latest
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: auth-service-config-map
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: auth-service-config-map
+data:
+  GIN_MODE: release
+  DB_HOST: "10.97.166.153"
+  DB_USER: root
+  DB_PASSWORD: vizu
+  DB_PORT: "5432"
+  DB_NAME: user
+  JWT_SECRET_KEY: secret
+  JWT_DURATION: "7200"
+  REDIS_ADDR: 10.110.240.194:6379
+  REDIS_USERNAME: havis
+  REDIS_PASS: secret
+  SERVER_PORT: "8000"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-svc
+spec:
+  selector:
+    app: authentication-pod
+  ports:
+    - port: 8000
+      targetPort: 8000

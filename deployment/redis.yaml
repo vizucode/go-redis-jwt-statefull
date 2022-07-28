@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: redis-app
+  template:
+    metadata:
+      name: redis-app
+      labels:
+        app: redis-app
+    spec:
+      volumes:
+        - name: redis-volume
+          hostPath:
+            path: /
+            type: Directory
+      containers:
+        - name: redis-app
+          image: redis:latest
+          command:
+            - redis-server
+            - /usr/local/etc/redis/redis.conf
+          ports:
+            - containerPort: 6379
+          volumeMounts:
+            - name: redis-volume
+              mountPath: /usr/local/etc/redis
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-svc
+spec:
+  selector:
+    app: redis-app
+  ports:
+    - port: 6379
+      targetPort: 6379

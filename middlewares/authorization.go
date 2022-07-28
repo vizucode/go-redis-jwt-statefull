@@ -29,18 +29,21 @@ func Authorize(ctx *gin.Context) {
 	if result.Err() != nil {
 		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 			"message": "status unathorized",
+			"error":   result.Err(),
 		})
 		return
 	}
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 			"message": "status unathorized",
+			"error":   err.Error(),
 		})
 		return
 	}
 	if !token.Valid {
 		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 			"message": "status unathorized",
+			"error":   err.Error(),
 		})
 		return
 	}

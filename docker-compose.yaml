@@ -1,0 +1,75 @@
+version: "3.8"
+
+services:
+  user_service:
+    container_name: go_user
+    image: hirasakavizu/go_user_service
+    depends_on: 
+      - db_postgre
+      - user_auth
+    restart: on-failure
+    environment:
+      GIN_MODE: release
+      DB_HOST: db_psql
+      DB_USER: root
+      DB_PASSWORD: vizu
+      DB_PORT: 5432
+      DB_NAME: user
+      JWT_SECRET: secret
+      REDIS_ADDR: redis:6379
+      REDIS_USERNAME: havis
+      REDIS_PASSWORD: secret
+      SERVER_PORT: 8080
+    ports:
+      - "8080:8080"
+    networks:
+      - user-net
+  user_auth:
+    container_name: go_auth
+    image: hirasakavizu/go_authentication
+    depends_on: 
+      - db_postgre
+    restart: on-failure
+    environment:
+      GIN_MODE: release
+      DB_HOST: db_psql
+      DB_USER: root
+      DB_PASSWORD: vizu
+      DB_PORT: 5432
+      DB_NAME: user
+      JWT_SECRET_KEY: secret
+      JWT_DURATION: 300
+      REDIS_ADDR: redis:6379
+      REDIS_USERNAME: havis
+      REDIS_PASS: secret
+      SERVER_PORT: 8000
+    ports:
+      - "8000:8000"
+    networks:
+      - user-net
+  db_postgre:
+    container_name: db_psql
+    image: postgres:14.4
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: vizu
+      POSTGRES_DB: user
+    networks:
+      - user-net
+    ports:
+      - "5433:5432"
+  redis:
+    container_name: redis
+    image: redis:latest
+    command: redis-server /config.conf
+    ports:
+      - 6379:6379
+    volumes:
+      - ./redis.conf:/config.conf
+    networks:
+      - user-net
+networks:
+  user-net:
+    driver: bridge
+
+

@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: user-service-pod
+  template:
+    metadata:
+      name: user-service-pod
+      labels: 
+        app: user-service-pod
+    spec:
+      containers:
+        - name: go-user-service
+          image: hirasakavizu/go_user_service:latest
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: user-config-map
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: user-config-map
+data:
+  GIN_MODE: release
+  DB_HOST: "10.97.166.153"
+  DB_USER: root
+  DB_PASSWORD: vizu
+  DB_PORT: "5432"
+  DB_NAME: user
+  JWT_SECRET: secret
+  REDIS_ADDR: 10.110.240.194:6379
+  REDIS_USERNAME: havis
+  REDIS_PASSWORD: secret
+  SERVER_PORT: "8080"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: users-svc
+spec:
+  selector:
+    app: user-service-pod
+  ports:
+    - port: 8080
+      targetPort: 8080
