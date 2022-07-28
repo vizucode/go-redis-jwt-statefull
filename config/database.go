@@ -19,12 +19,6 @@ func NewDB() *gorm.DB {
 		panic(err)
 	}
 
-	// host := "localhost"
-	// user := "root"
-	// password := "vizu"
-	// dbname := "test"
-	// port := 5432
-
 	dsn := fmt.Sprintf(`host=%s user=%s password=%s dbname=%s port=%d sslmode=disable TimeZone=Asia/Jakarta`, host, user, password, dbname, port)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
