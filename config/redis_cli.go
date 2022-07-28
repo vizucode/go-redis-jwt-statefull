@@ -1,18 +1,15 @@
 package config
 
 import (
+	"os"
+
 	"github.com/go-redis/redis/v9"
 )
 
-// var REDIS_ADDR = os.Getenv("REDIST_ADDR")
-// var REDIS_DB = os.Getenv("REDIST_DB")
-// var REDIS_USERNAME = os.Getenv("REDIST_USERNAME")
-// var REDIS_PASSWORD = os.Getenv("REDIST_PASSWORD")
-
-var REDIS_ADDR = "localhost:6379"
+var REDIS_ADDR = os.Getenv("REDIS_ADDR")
 var REDIS_DB = 0
-var REDIS_USERNAME = "havis"
-var REDIS_PASSWORD = "secret"
+var REDIS_USERNAME = os.Getenv("REDIS_USERNAME")
+var REDIS_PASSWORD = os.Getenv("REDIS_PASSWORD")
 
 func RedisClient() *redis.Client {
 	rdb := redis.NewClient(&redis.Options{

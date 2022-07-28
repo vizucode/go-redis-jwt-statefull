@@ -1,4 +1,5 @@
 package config
 
-// var JWT_TOP_SECRET = os.Getenv("JWT_SECRET")
-var JWT_TOP_SECRET = "secret"
+import "os"
+
+var JWT_TOP_SECRET = []byte(os.Getenv("JWT_SECRET"))
