@@ -6,6 +6,7 @@ import (
 	"go_jwt_statefull/middlewares"
 	repositories "go_jwt_statefull/repositories"
 	"go_jwt_statefull/services"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
@@ -28,8 +29,9 @@ func main() {
 	}
 
 	server.NoRoute(handlers.NoRoute)
+	port := os.Getenv("SERVER_PORT")
 
-	if err := server.Run(":8080"); err != nil {
+	if err := server.Run(":" + port); err != nil {
 		panic(err.Error())
 	}
 }
